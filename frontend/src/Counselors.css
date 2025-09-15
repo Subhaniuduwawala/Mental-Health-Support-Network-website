@@ -1,0 +1,416 @@
+/* Add margin to DataGrid container */
+.mui-datagrid-margin {
+  margin: 24px !important;
+}
+.counselors-page {
+  font-family: "Poppins", sans-serif;
+  background: #f5f7fb;
+  color: #1e293b;
+ 
+}
+
+/* ---------- Hero with video & overlay text ---------- */
+.hero2 {
+  position: relative;
+  width: 100%;
+  height: 700px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: 0 10px 26px rgba(2, 6, 23, 0.12);
+
+ 
+}
+
+.hero-video2 {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 1;
+  filter: brightness(0.45) contrast(1.1);
+}
+
+
+
+.hero-content2 {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  text-align: center;
+  color: #fff;
+}
+
+.hero-content2 h1 {
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  letter-spacing: 0.3px;
+  margin-top: 100px;
+  margin: 0 0 0 1 rem;
+  text-shadow: 2px 2px 10px rgba(0,0,0,0.5);
+}
+
+.hero-content2 p {
+  max-width: 780px;
+  font-size: clamp(1rem, 2.2vw, 1.2rem);
+  line-height: 1.7;
+  margin: 0.8rem auto;
+  text-shadow: 1px 1px 8px rgba(0,0,0,0.45);
+}
+
+.hero-cta-row2 {
+  display: inline-flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.hero-btn2 {
+  background: #ffca28;
+  color: #212121;
+  padding: 0.9rem 1.4rem;
+  border: none;
+  border-radius: 999px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
+  box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+}
+
+.hero-btn:hover {
+  background: #ffc107;
+  transform: translateY(-2px);
+  box-shadow: 0 14px 28px rgba(0,0,0,0.22);
+}
+
+.hero-link {
+  color: #f1ff31;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 3px solid rgba(243, 248, 242, 0.934);
+  padding-bottom: 2px;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.hero-link:hover { opacity: 1; border-color: #030303; }
+
+.hero-link2 {
+  color: #f1ff31;
+  font-weight: 600;
+  text-decoration: none;
+  border-bottom: 3px solid rgba(243, 248, 242, 0.934);
+  padding-bottom: 2px;
+  transition: opacity 0.2s ease, border-color 0.2s ease;
+}
+
+.hero-link2:hover { opacity: 1; border-color: #030303; }
+
+/* ---------- Split intro section ---------- */
+.counselors-hero {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  background: #fff;
+  padding: 1.5rem;
+  border-radius: 16px;
+  box-shadow: 0 6px 18px rgba(2, 6, 23, 0.06);
+  width: 1700px;
+  margin: auto ;
+  margin-bottom: 20px;
+  margin-top: 20px;
+  height: 400px;
+  
+}
+
+.hero-left { flex: 0 0 auto; }
+
+.hero-left img {
+  width: 500px;
+  border-radius: 14px;
+  object-fit: cover;
+  box-shadow: 0 8px 22px rgba(2, 6, 23, 0.08);
+}
+
+.hero-right { flex: 1; }
+
+.hero-right h2 {
+  color: #1a237e;
+  margin-bottom: 0.6rem;
+  font-size: clamp(1.6rem, 3vw, 1.9rem);
+    font-weight: bold
+}
+
+.hero-right p {
+  margin-bottom: 0.6rem;
+  color: #475569;
+  line-height: 1.8;
+}
+
+.hero-right ul {
+  margin-top: 0.8rem;
+  padding-left: 1.2rem;
+  color: #1f2937;
+  columns: 2;
+  column-gap: 2.2rem;
+}
+
+@media (max-width: 900px) {
+  .hero-right ul { columns: 1; }
+}
+
+@media (max-width: 768px) {
+  .counselors-hero {
+    flex-direction: column;
+    text-align: center;
+    gap: 1rem;
+  }
+  .hero-right { margin-top: 0.5rem; }
+}
+
+/* ---------- Counselor cards ---------- */
+/* WIDER but COMPACT grid */
+/* Make sure sizing never overflows weirdly */
+*, *::before, *::after { box-sizing: border-box; }
+
+/* Grid: keep it clean and responsive */
+.counselors-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 1rem;
+  margin: 0 auto 1.6rem;
+  max-width: 1100px;
+  align-items: stretch; /* let items stretch to the tallest in the row */
+}
+
+/* Card becomes a FLEX COLUMN with equalized layout */
+.counselor-card {
+  background: #fff;
+  padding: 0.9rem;
+  border-radius: 14px;
+  text-align: center;
+  box-shadow: 0 6px 16px rgba(2,6,23,0.06);
+  border: 1px solid rgba(2,6,23,0.05);
+  transition: transform 0.16s ease, box-shadow 0.16s ease;
+
+  /* equal heights per row */
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* subtle hover */
+.counselor-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 24px rgba(2,6,23,0.12);
+}
+
+/* Top block (avatar + badge) */
+.card-top {
+  position: relative;
+  margin-bottom: 0.4rem;
+}
+
+.category-badge {
+  position: absolute;
+  top: -6px;
+  left: -6px;
+  background: #e3f2fd;
+  color: #0b5394;
+  padding: 4px 8px;
+  border-radius: 999px;
+  font-size: 0.9rem;
+  font-weight: 700;
+  border: 1px solid #bbdefb;
+  box-shadow: 0 3px 8px rgba(11,83,148,0.08);
+  pointer-events: none;
+}
+
+.counselor-img {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+ 
+  object-fit: cover;
+  border: 2px solid #eef2ff;
+  box-shadow: 0 6px 14px rgba(2,6,23,0.08);
+  margin-top: 40px;
+}
+
+/* Name */
+.counselor-card h3 {
+  
+  color: #0f172a;
+  font-size: 1.5rem;
+  font-weight: 600;
+  line-height: 1.2;
+  margin-top: 20px;
+
+  /* 1-line clamp for long names */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* NEW: middle block flexes to fill height */
+.card-content {
+  display: flex;
+  margin-top: 20px;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1; /* grow to take remaining height */
+ 
+}
+
+/* Meta list compact + CLAMP each line to prevent overflow */
+.counselor-meta {
+  list-style: none;
+  padding: 0;
+  margin: 0.2rem 0 0.2rem;
+  color: #475569;
+  font-size: 0.9rem;
+  line-height: 1.35;
+  display: grid;
+  gap: 2px;
+}
+
+.meta-line {
+  /* allow wrapping but clamp to 1 line to avoid height jumps */
+  display: -webkit-box;
+  -webkit-line-clamp: 1;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;   /* break long words before overflowing */
+}
+
+/* Quote: 2-line clamp for consistency */
+.counselor-quote {
+  font-style: italic;
+  color: #334155;
+  margin: 0.1rem 0 0.1rem;
+  padding: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  min-height: 2.2em; /* keeps rows even even if quote is short */
+}
+
+/* Bottom area pinned to bottom of card content */
+.card-bottom {
+  margin-top: auto;        /* push to bottom */
+  display: grid;
+  gap: 0.4rem;
+}
+
+.rating { margin: 0; }
+.stars  { color: #f39c12; font-size: 1rem; letter-spacing: 0.5px; }
+
+/* Button compact */
+.outline-btn {
+  display: inline-block;
+  padding: 0.45rem 0.75rem;
+  border-radius: 8px;
+  border: 2px solid #1e40af;
+  color: #1e40af;
+  background: #fff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: background 0.18s ease, color 0.18s ease, transform 0.18s ease;
+}
+.outline-btn:hover { background:#1e40af; color:#fff; transform: translateY(-1px); }
+
+.load-more-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 1.2rem;
+  margin-bottom: 1.2rem;
+  padding: 0.5rem;
+    
+}
+
+/* ---------- Appointment ---------- */
+.appointment-section {
+  background: linear-gradient(92deg, #283593, #1976d2);
+  color: #fff;
+  padding: 3rem 1.2rem;
+  border-radius: 16px;
+  text-align: center;
+  width: 700px;
+  margin: 0 auto 2rem;
+  box-shadow: 0 10px 26px rgba(2, 6, 23, 0.12);
+}
+
+.appointment-section h2 {
+  margin-bottom: 0.4rem;
+  font-size: clamp(1.4rem, 3.5vw, 2rem);
+  color: #f3e822;
+  font-weight: 700;
+}
+
+.appt-note {
+  opacity: 0.95;
+  margin: 0 auto 0.8rem;
+  max-width: 920px;
+}
+
+.appointment-form {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+
+.appointment-form input,
+.appointment-form select,
+.appointment-form textarea {
+  padding: 0.8rem;
+  border-radius: 10px;
+  border: none;
+  outline: none;
+  background: #f8fafc;
+  color: #0f172a;
+}
+
+.appointment-form textarea {
+  grid-column: span 2;
+  resize: vertical;
+  min-height: 90px;
+}
+
+.appointment-form button {
+  grid-column: span 2;
+  padding: 0.85rem;
+  background: #dad70c;
+  color: #1a17c6;
+  border: none;
+  font-weight: 800;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.25s ease, transform 0.15s ease;
+}
+
+.appointment-form button:hover {
+  background: #939ba4;
+  transform: translateY(-1px);
+}
+
+@media (max-width: 560px) {
+  .appointment-form textarea,
+  .appointment-form button { grid-column: span 1; }
+}
+
+
+@media (max-width: 900px) {
+  .counselors-page { padding: 0 0.6rem; }
+}
+
+
+

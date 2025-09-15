@@ -1,0 +1,147 @@
+.support-page {
+  font-family: 'Segoe UI', sans-serif;
+  color: #333;
+  background: linear-gradient(180deg, #e3f2fd, #f5f7fa);
+  min-height: 100vh;
+  padding-bottom: 50px;
+  position: relative;
+  overflow: hidden;
+}
+
+
+
+/* Hero Section */
+.hero3 {
+  position: relative;
+  padding: 80px 20px 50px;
+  background: rgba(255, 255, 255, 0.7); /* Semi-transparent background for text visibility */
+  border-bottom: 2px solid #90caf9;
+  border-radius: 0 0 25px 25px;
+  backdrop-filter: blur(4px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+   height: 700px; /* Makes the hero section take full height of the viewport */
+}
+
+/* Video styling */
+.hero-video3 {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: -1; 
+filter: brightness(0.7); /* Darkens the video for better text contrast */
+}
+
+/* Text styling */
+.hero3 h1 {
+  font-size: 3rem;
+  color: #ffffff;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6); /* Adds a shadow to make text pop */
+}
+
+.hero3 p {
+  font-size: 1.4rem;
+  color: #ffffff;
+  margin: 0;
+  text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.6); /* Adds a shadow to make text pop */
+}
+
+
+/* Grid */
+.grid-wrap {
+  display: grid;
+  gap: 35px;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  padding: 50px 20px;
+  max-width: 1300px;
+  margin: auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Cards */
+.card {
+  background: rgba(255,255,255,0.9);
+  border-radius: 15px;
+  border: 2px solid #c6c8f5;
+  padding: 25px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  backdrop-filter: blur(6px);
+}
+.card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+.card-header h2 {
+  font-size: 1.4rem;
+  color: #0d47a1;
+  margin: 0;
+}
+.icon-wrap { font-size: 1.6rem; }
+
+/* Breathing visual */
+.breath-visual { text-align: center; margin: 20px 0; }
+.circle {
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  background: #81c784;
+  animation: pulse 4s infinite ease-in-out;
+}
+@keyframes pulse {
+  0%,100% { transform: scale(1); opacity: 0.7; }
+  50% { transform: scale(1.4); opacity: 1; }
+}
+.phase { font-weight: bold; color: #0d47a1; }
+.counter { color: #555; }
+
+/* YouTube & Games */
+.yt-frame iframe, .game-frame {
+  width: 100%;
+  height: 260px;
+  border: none;
+  border-radius: 12px;
+  margin-top: 10px;
+}
+
+/* Tips */
+.tips { padding-left: 18px; color: #444; }
+.tips li { margin: 6px 0; }
+
+/* Affirmations */
+.affirmation {
+  font-size: 1.2rem;
+  font-style: italic;
+  text-align: center;
+  margin: 20px 0;
+  color: #444;
+  border-left: 4px solid #1e88e5;
+  padding-left: 12px;
+}
+
+/* Footer */
+.foot {
+  text-align: center;
+  padding: 25px;
+  font-size: 0.9rem;
+  color: #555;
+  margin-top: 50px;
+  border-top: 1px solid #ddd;
+  background: rgba(255,255,255,0.85);
+  border-radius: 20px 20px 0 0;
+}
+

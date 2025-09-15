@@ -1,0 +1,180 @@
+.services-page {
+  font-family: Arial, sans-serif;
+  color: #222;
+}
+
+/* Hero Section */
+.services-hero {
+  position: relative;
+  width: 100%;
+  height: 80vh; /* adjust height as needed */
+  overflow: hidden;
+}
+
+.hero-video {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* ensures video fills the area */
+  z-index: 1;
+}
+
+/* Optional: dark overlay for better text visibility */
+.services-hero::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.3);
+  z-index: 2;
+}
+
+
+/* Quick Services */
+.quick-services {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+  padding: 40px;
+  height: 850px;
+}
+.service-card {
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  
+  transition: transform 0.3s ease;
+}
+.service-card:hover {
+  transform: translateY(-5px);
+}
+.service-card img {
+  width: 450px;
+  border-radius: 20px;
+  height: 550px;
+  margin: 0 auto;
+  display: block;
+  border: 2px solid #003399; /* Blue border */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  object-fit: cover;
+}
+.service-card h3 {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  margin: 10px 0;
+  color: #003399;
+}
+.service-card p {
+  padding: 0 10px 15px;
+  font-size: 1.2rem;
+  text-align: justify;
+  padding: 0px 25px 20px 25px;
+  line-height: 1.6;
+  margin: 0;  
+  
+  color: #555;
+}
+
+/* Concepts Section */
+.concepts-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr); /* 2 columns */
+  gap: 20px; /* space between cards */
+  padding: 40px 20px;
+  margin: auto;
+}
+
+.concept-card {
+  background-color: #f8f9fa;
+  border-radius: 10px;
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s ease,
+  box-shadow 0.3s ease;
+  padding: 20px;
+  box-sizing: border-box;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+.concept-card img {
+  width: 800px;
+  height: 400px;
+  object-fit: cover;
+  display: block;
+  margin: 0 auto;
+  border-radius: 10px;
+  margin-bottom: 15px;
+}
+
+.concept-card h4 {
+  font-size: 1.1rem;
+  font-weight: bold;
+  color: #003366;
+}
+
+
+
+/* Mobile Responsive: 1 column */
+@media (max-width: 768px) {
+  .concepts-section {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Chat Banner */
+.chat-banner {
+  height: 550px;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  align-items: center;
+  justify-content: center; 
+}
+
+.chat-content {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 20px;
+  border-radius: 8px;
+  height: 250px;
+  max-width: 600px;
+  color: white;
+  text-align: center; 
+}
+
+.chat-content h2 {
+  font-size: 1.5rem;
+  margin-bottom: 30px;
+  font-weight: bold;
+  color: #ffcc00; 
+}
+.chat-content p {
+  font-size: 0.9rem;
+  margin-bottom: 15px;
+  padding: 0px 30px 20px 30px;
+}
+.chat-btn {
+  background: #ffcc00;
+  color: #000;
+  font-weight: bold;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+.chat-btn:hover {
+  background: #ffb700;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .chat-content {
+    margin: 20px;
+  }
+}

@@ -1,5 +1,4 @@
-// backend/models/Message.js
-const mongoose = require("mongoose");
+import mongoose from "mongoose";
 
 const MessageSchema = new mongoose.Schema({
   name: { type: String, required: true },
@@ -8,4 +7,4 @@ const MessageSchema = new mongoose.Schema({
   date: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model("Message", MessageSchema);
+export default mongoose.model("Message", MessageSchema);

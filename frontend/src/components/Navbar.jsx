@@ -5,20 +5,22 @@ import logo1 from "../assets/logo1.png";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [profileOpen, setProfileOpen] = useState(false);
   const navigate = useNavigate();
 
   const toggle = () => setOpen((o) => !o);
   const close = () => setOpen(false);
 
   const handleLogout = () => {
-    localStorage.clear(); // remove token + role + username
+    localStorage.clear();
     sessionStorage.clear();
     navigate("/login");
     close();
   };
 
-  // 👇 Read role saved from login
-  const userRole = localStorage.getItem("userRole"); // "admin" or "employee"
+  const username = localStorage.getItem("username");
+  const userRole = localStorage.getItem("userRole");
+  
 
   const links = [
     { to: "/home", label: "HOME" },
@@ -72,18 +74,71 @@ export default function Navbar() {
           ))}
 
           <div className="actions">
-            <Link to="/login" className="btn ghost" onClick={close}>
-              Log in
-            </Link>
-            <button className="btn solid" onClick={handleLogout}>
-              Logout
-            </button>
-
-            {/* 👇 Only show Admin if role is admin */}
-            {userRole === "admin" && (
-              <NavLink to="/admin/appointments" className="admin" onClick={close}>
-                Admin
-              </NavLink>
+            {username ? (
+              <>
+                <div className="profile-menu">
+                  <button 
+                    className="profile-btn"
+                    onClick={() => setProfileOpen(!profileOpen)}
+                  >
+                    <span className="user-icon"></span>
+                    <span className="username">{username}</span>
+                    <svg className={`dropdown-icon ${profileOpen ? 'open' : ''}`} xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none">
+                      <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
+                    </svg>
+                  </button>
+                  
+                  {profileOpen && (
+                    <div className="profile-dropdown">
+                      <div className="dropdown-header">
+                        <div className="user-info">
+                          <p className="user-name">{username}</p>
+                          <p className="user-role">{userRole}</p>
+                        </div>
+                      </div>
+                      <div className="dropdown-divider"></div>
+                      <Link 
+                        to="/profile" 
+                        className="dropdown-item"
+                        onClick={() => {
+                          setProfileOpen(false);
+                          close();
+                        }}
+                      >
+                        <span className="icon">⚙️</span> View Profile
+                      </Link>
+                      {userRole === "admin" && (
+                        <Link 
+                          to="/admin/appointments" 
+                          className="dropdown-item"
+                          onClick={() => {
+                            setProfileOpen(false);
+                            close();
+                          }}
+                        >
+                          <span className="icon">📋</span> Admin Panel
+                        </Link>
+                      )}
+                      <div className="dropdown-divider"></div>
+                      <button 
+                        className="dropdown-item logout"
+                        onClick={() => {
+                          handleLogout();
+                          setProfileOpen(false);
+                        }}
+                      >
+                        <span className="icon">🚪</span> Logout
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
+            ) : (
+              <>
+                <Link to="/login" className="btn ghost" onClick={close}>
+                  Log in
+                </Link>
+              </>
             )}
           </div>
         </nav>

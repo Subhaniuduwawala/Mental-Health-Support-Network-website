@@ -1,13 +1,17 @@
-// models/Employee.js
-const mongoose = require('mongoose');
+import mongoose from 'mongoose';
 
 const EmployeeSchema = new mongoose.Schema(
   {
     name:  { type: String, required: true, trim: true },
     email: { type: String, required: true, trim: true, unique: true, lowercase: true },
     password: { type: String, required: true },
+    phone: { type: String, trim: true, default: "" },
+    bio: { type: String, trim: true, default: "" },
+    specialization: { type: String, trim: true, default: "" },
+    experience: { type: String, trim: true, default: "" },
+    qualification: { type: String, trim: true, default: "" },
+    profileImage: { type: String, default: "" },
     
-    // 👇 Add role (default is "employee")
     role: {
       type: String,
       enum: ["admin", "employee"],
@@ -17,9 +21,6 @@ const EmployeeSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
-// unique email index
-EmployeeSchema.index({ email: 1 }, { unique: true });
-
-module.exports = mongoose.model('Employee', EmployeeSchema);
+export default mongoose.model('Employee', EmployeeSchema);
 
 

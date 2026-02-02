@@ -6,7 +6,6 @@ import logo1 from "./assets/logo1.png";
 import Background from "./assets/Background.mp4";
 
 function Login() {
-  const [username, setUsername] = useState("");  // NEW
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -18,13 +17,13 @@ function Login() {
     setError("");
     setLoading(true);
     try {
-      // Send username + email + password
       const response = await axios.post('http://localhost:3001/login', { 
          email, password 
       });
 
       if (response.data.Status === "Success") {
         // Save login info
+        localStorage.setItem("userId", response.data.userId);
         localStorage.setItem("userRole", response.data.role);
         localStorage.setItem("username", response.data.username);
         localStorage.setItem("email", response.data.email);
@@ -71,21 +70,6 @@ function Login() {
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* Username */}
-          <div className="mb-3">
-            <label>
-              <strong>Username</strong>
-            </label>
-            <input
-              type="text"
-              placeholder="Enter Username"
-              className="form-control rounded-0"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-          </div>
-
           {/* Email */}
           <div className="mb-3">
             <label>
@@ -127,7 +111,7 @@ function Login() {
         </form>
 
         <p className="text-center mt-2">Don't have an account?</p>
-        <Link to="/register" className="btn btn-secondary w-100 fw-bold text-white">
+        <Link to="/register" className="btn btn-secondary w-100 fw-bold text-blue">
           Sign Up
         </Link>
       </div>

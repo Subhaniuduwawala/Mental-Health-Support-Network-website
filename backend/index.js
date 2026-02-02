@@ -1,10 +1,10 @@
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require("cors");
-const bcrypt = require('bcrypt');
-const EmployeeModel = require('./models/Employee');
-const AppointmentModel = require('./models/Appointment'); // Appointment schema
-const MessageModel = require("./models/Message"); 
+import express from 'express';
+import mongoose from 'mongoose';
+import cors from "cors";
+import bcrypt from 'bcrypt';
+import EmployeeModel from './models/Employee.js';
+import AppointmentModel from './models/Appointment.js';
+import MessageModel from "./models/Message.js";
 
 const app = express();
 app.use(cors());
@@ -21,20 +21,20 @@ mongoose.connect("mongodb://127.0.0.1:27017/employee")
 // ==================== SEED ADMIN ====================
 async function seedAdmin() {
   try {
-    const adminEmail = "admin@mindwell.com"; // fixed admin email
+    const adminEmail = "admin@mindwell.com";
     const existingAdmin = await EmployeeModel.findOne({ email: adminEmail });
 
     if (!existingAdmin) {
-      const hashedPassword = await bcrypt.hash("Admin123!", 10); // strong default password
+      const hashedPassword = await bcrypt.hash("Admin123!", 10); 
       const adminUser = new EmployeeModel({
         name: "Admin",
         email: adminEmail,
         password: hashedPassword,
-        role: "admin", // 👈 role field must exist in your Employee schema
+        role: "admin",
       });
 
       await adminUser.save();
-      console.log("✅ Admin account created:", adminEmail, "password=Admin123!");
+      console.log("✅ Admin account created:", adminEmail);
     } else {
       console.log("ℹ️ Admin account already exists:", adminEmail);
     }
@@ -45,7 +45,39 @@ async function seedAdmin() {
 
 // ==================== AUTH ====================
 
-// Login
+app.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
+
+  try {
+    // Check if email already exists
+    const existingUser = await EmployeeModel.findOne({ email: email });
+    if (existingUser) {
+      return res.status(400).json({ Status: "Failed", message: "Email already registered" });
+    }
+
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = new EmployeeModel({
+      name: name,
+      email: email,
+      password: hashedPassword,
+      role: "employee"
+    });
+
+    await newUser.save();
+    
+    res.status(201).json({ 
+      Status: "Success", 
+      message: "User registered successfully!" 
+    });
+  } catch (err) {
+    console.error("Registration error:", err);
+    res.status(500).json({ Status: "Error", message: "Server error" });
+  }
+});
+
 app.post('/login', async (req, res) => {
   const { email, password } = req.body;
 
@@ -60,12 +92,20 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ Status: "Failed", message: "Incorrect Password" });
     }
 
-    // send role + name + email back
-    return res.status(200).json({ 
+    const token = jwt.sign(
+      { sub: user._id, role: user.role, email: user.email, name: user.name },
+      process.env.JWT_SECRET || "dev-secret",
+      { expiresIn: "1d" }
+    );
+    
+    res.status(200).json({ 
       Status: "Success", 
+      userId: user._id,
       role: user.role, 
+      username: user.name,
       name: user.name, 
-      email: user.email 
+      email: user.email, 
+      token 
     });
   } catch (err) {
     console.error("Login error:", err);
@@ -73,25 +113,10 @@ app.post('/login', async (req, res) => {
   }
 });
 
-// Register (always employee)
-app.post('/register', async (req, res) => {
-  try {
-    const { password, ...rest } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
-    await EmployeeModel.create({ ...rest, password: hashedPassword, role: "employee" });
-    res.json("Employee Registered");
-  } catch (err) {
-    console.error("Register error:", err);
-    res.status(500).json({ Status: "Error", message: "Error registering employee" });
-  }
-});
-
 // ==================== APPOINTMENTS ====================
 
-// Save Appointment
 app.post('/appointments', async (req, res) => {
   try {
-    console.log("📥 New Appointment:", req.body); // Debug log
     const appointment = new AppointmentModel(req.body);
     await appointment.save();
     res.status(201).json({ message: "Appointment booked successfully!", appointment });
@@ -101,10 +126,15 @@ app.post('/appointments', async (req, res) => {
   }
 });
 
-// Get All Appointments
 app.get('/appointments', async (req, res) => {
   try {
-    const appointments = await AppointmentModel.find();
+    const { email } = req.query;
+    
+    // If email query param is provided, filter by email
+    // Otherwise return all appointments (for admin)
+    const query = email ? { email: email.toLowerCase() } : {};
+    
+    const appointments = await AppointmentModel.find(query).sort({ startAt: -1 });
     res.json(appointments);
   } catch (err) {
     console.error("Fetch appointments error:", err);
@@ -112,7 +142,6 @@ app.get('/appointments', async (req, res) => {
   }
 });
 
-// Update (edit) an appointment
 app.put('/appointments/:id', async (req, res) => {
   try {
     const { id } = req.params;
@@ -128,20 +157,35 @@ app.put('/appointments/:id', async (req, res) => {
   }
 });
 
-// ================= CONTACT FORM API ==================
-app.post("/contact", async (req, res) => {
+// ==================== MESSAGES ====================
+
+app.delete("/messages/:id", async (req, res) => {
   try {
-    const { name, email, message } = req.body;
-    const newMessage = new MessageModel({ name, email, message });
-    await newMessage.save();
-    res.status(201).json({ message: "Message sent successfully!" });
+    const { id } = req.params;
+    const deletedMessage = await MessageModel.findByIdAndDelete(id);
+    if (!deletedMessage) return res.status(404).json({ error: "Message not found" });
+    res.status(200).json({ message: "Message deleted successfully!" });
   } catch (err) {
-    console.error("Message save error:", err);
-    res.status(500).json({ error: "Failed to send message" });
+    console.error("Message delete error:", err);
+    res.status(500).json({ error: "Failed to delete message" });
   }
 });
 
-// Save new message
+app.put("/messages/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updatedMessage = await MessageModel.findByIdAndUpdate(id, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    if (!updatedMessage) return res.status(404).json({ error: "Message not found" });
+    res.status(200).json(updatedMessage);
+  } catch (err) {
+    console.error("Message update error:", err);
+    res.status(500).json({ error: "Failed to update message" });
+  }
+});
+
 app.post("/messages", async (req, res) => {
   try {
     const newMessage = new MessageModel(req.body);
@@ -153,8 +197,7 @@ app.post("/messages", async (req, res) => {
   }
 });
 
-// Get all messages (for Admin)
-app.get("/messages", async (req, res) => {
+app.get("/messages", async (_, res) => {
   try {
     const messages = await MessageModel.find().sort({ createdAt: -1 });
     res.json(messages);
@@ -163,33 +206,53 @@ app.get("/messages", async (req, res) => {
   }
 });
 
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-// ...
-const counselorRoutes = require("./routes/counselors");
-// ...
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    const user = await EmployeeModel.findOne({ email });
-    if (!user) return res.status(404).json({ Status: "Failed", message: "No record existed" });
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) return res.status(401).json({ Status: "Failed", message: "Incorrect Password" });
+// ==================== PROFILE ====================
 
-    const token = jwt.sign(
-      { sub: user._id, role: user.role, email: user.email, name: user.name },
-      process.env.JWT_SECRET || "dev-secret",
-      { expiresIn: "1d" }
-    );
-    res.status(200).json({ Status: "Success", role: user.role, name: user.name, email: user.email, token });
+// Get user profile by ID
+app.get("/profile/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await EmployeeModel.findById(id).select("-password");
+    if (!user) {
+      return res.status(404).json({ Status: "Failed", message: "User not found" });
+    }
+    res.status(200).json({ Status: "Success", user });
   } catch (err) {
+    console.error("Profile fetch error:", err);
     res.status(500).json({ Status: "Error", message: "Server error" });
   }
 });
 
-// mount counselors API
-app.use("/counselors", counselorRoutes);
+// Update user profile
+app.put("/profile/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { name, phone, bio, specialization, experience, qualification, profileImage } = req.body;
 
+    const updatedUser = await EmployeeModel.findByIdAndUpdate(
+      id,
+      { name, phone, bio, specialization, experience, qualification, profileImage },
+      { new: true, runValidators: true }
+    ).select("-password");
+
+    if (!updatedUser) {
+      return res.status(404).json({ Status: "Failed", message: "User not found" });
+    }
+
+    res.status(200).json({ 
+      Status: "Success", 
+      message: "Profile updated successfully!",
+      user: updatedUser 
+    });
+  } catch (err) {
+    console.error("Profile update error:", err);
+    res.status(500).json({ Status: "Error", message: "Server error" });
+  }
+});
+
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
 
 // ==================== SERVER ====================
 app.listen(3001, () => {

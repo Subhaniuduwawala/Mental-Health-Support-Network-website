@@ -50,6 +50,20 @@
 .footer-section ul li {
   margin-bottom: 8px;
   cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.footer-section ul li a {
+  text-decoration: none;
+  color: #1a1a1a;
+  transition: all 0.3s ease;
+  display: inline-block;
+}
+
+.footer-section ul li a:hover {
+  color: #1a1a8f;
+  transform: translateX(4px);
+  font-weight: 500;
 }
 
 .footer-section.contact p {

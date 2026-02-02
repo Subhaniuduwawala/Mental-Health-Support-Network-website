@@ -251,7 +251,8 @@ export default function Support() {
           className="hero-video3"
         />
         <h1>MindWell Support</h1>
-        <p>Gentle tools to steady your mind — breathe, listen, play, reflect, rest.</p>
+        <p> Gentle tools to steady your mind </p>
+        <p> breathe, listen, play, reflect, rest.</p>
       </section>
 
       {/* Grid Sections */}

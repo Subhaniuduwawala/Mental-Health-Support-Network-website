@@ -1,6 +1,7 @@
 import React from 'react';
 import './Footer.css';
 import { FaFacebookF, FaInstagram, FaLinkedinIn, FaYoutube, FaMapMarkerAlt, FaPhoneAlt, FaEnvelope } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import logo1 from "../assets/logo1.png";
 
 const Footer = () => {
@@ -26,11 +27,11 @@ const Footer = () => {
         <div className="footer-section links">
           <h4>Quick Links</h4>
           <ul>
-            <li>Home</li>
-            <li>Service</li>
-            <li>Counselors</li>
-            <li>Support</li>
-            <li>About Us</li>
+            <li><Link to="/home">Home</Link></li>
+            <li><Link to="/service">Service</Link></li>
+            <li><Link to="/counselors">Counselors</Link></li>
+            <li><Link to="/support">Support</Link></li>
+            <li><Link to="/about">About Us</Link></li>
           </ul>
         </div>
 

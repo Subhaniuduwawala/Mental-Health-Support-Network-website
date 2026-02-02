@@ -32,15 +32,15 @@ const ALL_COUNSELORS = [
   { name: "Ms. Piumi Ranasinghe", category: "Mindfulness & Meditation", experience: "6 years", languages: "English", approach: "MBSR, Breathwork", quote: "Come back to the present—where calm and clarity live.", rating: 4, image: image35 },
   { name: "Mr. Sanjaya Jayasuriya", category: "Addiction Recovery Support", experience: "9 years", languages: "Sinhala, English", approach: "Motivational Interviewing, Relapse Prevention", quote: "Recovery is possible—and you don’t have to do it alone.", rating: 4, image: image36 },
   { name: "Ms. Dinithi Abeysekara", category: "Trauma-Informed Care", experience: "10 years", languages: "Sinhala", approach: "EMDR-informed, Stabilization Skills", quote: "Gentle healing that respects your pace and your story.", rating: 5, image: image30 },
-];
+];  
 
-// helpers
+// Converts iso date string to display format
 const fmtDisplay = (iso) => {
   if (!iso) return "";
   const d = new Date(iso);
   return d.toLocaleString([], { year: "numeric", month: "short", day: "2-digit", hour: "2-digit", minute: "2-digit" });
 };
-const getDatePart = (iso) => {
+const getDatePart = (iso) => {  //extract date part
   if (!iso) return "";
   const d = new Date(iso);
   const y = d.getFullYear();
@@ -61,15 +61,16 @@ const Counselors = () => {
   const INITIAL_COUNT = 6;
   const LOAD_STEP = 6;
 
-  const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
-  const [loading, setLoading] = useState(false);
+const [visibleCount, setVisibleCount] = useState(INITIAL_COUNT);  // Controls how many counselors are visible
+const [selectedCategory, setSelectedCategory] = useState("All");  // Category filter
+const [error, setError] = useState("");                           // Error message for validation
+const [success, setSuccess] = useState("");                        // Success message for booking
+const [loading, setLoading] = useState(false);                    // Indicates if the system is loading data
+
 
   // appointments + edit
   const [appointments, setAppointments] = useState([]);
   const [loadingList, setLoadingList] = useState(false);
-
   const [editOpen, setEditOpen] = useState(false);
   const [editId, setEditId] = useState(null); // server id preferred
   const [editSaving, setEditSaving] = useState(false);
@@ -78,18 +79,36 @@ const Counselors = () => {
     date: "", time: "", notes: "",
   });
 
-  const visibleCounselors = ALL_COUNSELORS.slice(0, visibleCount);
-  const canShowMore = visibleCount < ALL_COUNSELORS.length;
+  // Extract unique categories for filter dropdown
+  const categories = ["All", ...new Set(ALL_COUNSELORS.map(c => c.category))];
 
-  const handleShowMore = () => setVisibleCount((c) => Math.min(c + LOAD_STEP, ALL_COUNSELORS.length));
+  // Filter counselors by selected category, then apply pagination
+  const filteredCounselors = selectedCategory === "All" 
+    ? ALL_COUNSELORS 
+    : ALL_COUNSELORS.filter(c => c.category === selectedCategory);
+  
+  const visibleCounselors = filteredCounselors.slice(0, visibleCount);
+  const canShowMore = visibleCount < filteredCounselors.length;
+
+  const handleShowMore = () => setVisibleCount((c) => Math.min(c + LOAD_STEP, filteredCounselors.length));
   const handleShowLess  = () => setVisibleCount(INITIAL_COUNT);
+
+  const handleCategoryChange = (e) => {
+    setSelectedCategory(e.target.value);
+    setVisibleCount(INITIAL_COUNT); // Reset pagination when category changes
+    scrollToList();
+  };
+
   const scrollToList = () => document.querySelector("#counselors-list")?.scrollIntoView({ behavior: "smooth", block: "start" });
 
   // Load from backend (returns mapped list so callers can immediately use it)
   const loadAppointments = async () => {
     try {
       setLoadingList(true);
-      const res = await axios.get(API);
+      const userEmail = localStorage.getItem('email');
+      const res = await axios.get(API, {
+        params: { email: userEmail }
+      });
       const list = Array.isArray(res.data) ? res.data : [];
       const mapped = list.map((r) => {
         const serverId = pickId(r) ?? null;
@@ -307,6 +326,30 @@ const Counselors = () => {
             <li>Career & Life Coaching</li>
             <li>Mindfulness & Meditation Experts</li>
           </ul>
+        </div>
+      </section>
+
+      {/* Category Filter */}
+      <section className="category-filter-section">
+        <div className="filter-container">
+          <label htmlFor="category-select" className="filter-label">
+            <span className="filter-icon">🔍</span>
+            Filter by Specialization:
+          </label>
+          <select 
+            id="category-select"
+            className="category-dropdown"
+            value={selectedCategory}
+            onChange={handleCategoryChange}
+            aria-label="Filter counselors by category"
+          >
+            {categories.map((cat, idx) => (
+              <option key={idx} value={cat}>{cat}</option>
+            ))}
+          </select>
+          <span className="results-count">
+            Showing {visibleCounselors.length} of {filteredCounselors.length} counselor{filteredCounselors.length !== 1 ? 's' : ''}
+          </span>
         </div>
       </section>
 

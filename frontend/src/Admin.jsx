@@ -159,14 +159,12 @@ const Admin = () => {
           <button type="submit">➕ Add</button>
         </form>
 
-        {/* Table */}
+        {/* Appointments Table */}
         <table className="data-table">
           <thead>
             <tr>
               <th>Name</th>
               <th>Email</th>
-              <th>Date</th>
-              <th>Time</th>
               <th>Phone</th>
               <th>Mode</th>
               <th>Counselor</th>
@@ -178,7 +176,7 @@ const Admin = () => {
             {appointments.map((appt) =>
               editId === appt._id && editType === "appointments" ? (
                 <tr key={appt._id}>
-                  {["name","email","date","time","phone","mode","counselor","notes"].map((field) => (
+                  {["name", "email",  "phone", "mode", "counselor", "notes"].map((field) => (
                     <td key={field}>
                       <input
                         type={field === "date" ? "date" : field === "time" ? "time" : "text"}
@@ -196,8 +194,6 @@ const Admin = () => {
                 <tr key={appt._id}>
                   <td>{appt.name}</td>
                   <td>{appt.email}</td>
-                  <td>{new Date(appt.date).toLocaleDateString()}</td>
-                  <td>{appt.time}</td>
                   <td>{appt.phone}</td>
                   <td>{appt.mode}</td>
                   <td>{appt.counselor}</td>
@@ -243,7 +239,7 @@ const Admin = () => {
           <button type="submit">➕ Add</button>
         </form>
 
-        {/* Table */}
+        {/* Messages Table */}
         <table className="data-table">
           <thead>
             <tr>

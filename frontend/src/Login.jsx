@@ -28,8 +28,15 @@ function Login() {
         localStorage.setItem("username", response.data.username);
         localStorage.setItem("email", response.data.email);
         
-            
-        navigate('/Home');
+        // Show success message with role info
+        console.log("✅ Login successful! Role:", response.data.role);
+        
+        // Redirect based on role
+        if (response.data.role === "admin") {
+          navigate('/admin/appointments');
+        } else {
+          navigate('/home');
+        }
       } else {
         setError(response.data.message || "Login failed. Please try again.");
       }

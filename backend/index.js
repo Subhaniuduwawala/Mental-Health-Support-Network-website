@@ -92,6 +92,8 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ Status: "Failed", message: "Incorrect Password" });
     }
 
+    console.log(`✅ User logged in: ${user.email} | Role: ${user.role}`);
+
     const token = jwt.sign(
       { sub: user._id, role: user.role, email: user.email, name: user.name },
       process.env.JWT_SECRET || "dev-secret",

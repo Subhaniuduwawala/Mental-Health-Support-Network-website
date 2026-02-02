@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Admin.css";
 
 const Admin = () => {
+  const navigate = useNavigate();
   const [appointments, setAppointments] = useState([]);
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -11,6 +13,16 @@ const Admin = () => {
   const [formData, setFormData] = useState({});
   const [newAppointment, setNewAppointment] = useState({});
   const [newMessage, setNewMessage] = useState({});
+
+  // Check if user is admin
+  useEffect(() => {
+    const userRole = localStorage.getItem("userRole");
+    if (userRole !== "admin") {
+      alert("⚠️ Access Denied: Admin privileges required");
+      navigate("/home");
+      return;
+    }
+  }, [navigate]);
 
   // Fetch both appointments & messages
   useEffect(() => {

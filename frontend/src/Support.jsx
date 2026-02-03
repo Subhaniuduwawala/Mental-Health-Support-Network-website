@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React from "react";
+import { useNavigate } from "react-router-dom";
 import "./Support.css";
 import heroVideo from "./assets/hero-video3.mp4";
 
@@ -34,6 +35,8 @@ function BreathingExercise() {
 }
 
 function CalmMusic() {
+  const navigate = useNavigate();
+  
   return (
     <section className="card">
       <header className="card-header">
@@ -41,18 +44,21 @@ function CalmMusic() {
         <h2>Calm Music</h2>
       </header>
       <p>Play soothing tracks or explore our calming playlist.</p>
-      <div className="yt-frame">
-        <iframe
-          title="Calm Playlist"
-          src="https://www.youtube.com/embed/videoseries?list=PLQog_ExamplePlaylistId"
-          allow="autoplay; encrypted-media"
-        />
-      </div>
+      <p></p>
+      <button 
+        className="music-list-btn"
+        onClick={() => navigate("/music-list")}
+      >
+        🎵 View Music Collection
+      </button>
+  
     </section>
   );
 }
 
 function MiniGame() {
+  const navigate = useNavigate();
+  
   return (
     <section className="card">
       <header className="card-header">
@@ -60,11 +66,13 @@ function MiniGame() {
         <h2>Mini Game — Memory Match</h2>
       </header>
       <p>Play a short, light game to gently shift attention and relax.</p>
-      <iframe
-        className="game-frame"
-        src="https://games.cdn.famobi.com/html5games/m/memory-html5/v210/?fg_domain=play.famobi.com&fg_aid=A1000-1"
-        title="Memory Game"
-      />
+      <button 
+        className="music-list-btn"
+        onClick={() => navigate("/mini-games")}
+      >
+        🎮 View All Games
+      </button>
+      
     </section>
   );
 }
@@ -122,6 +130,10 @@ function GuidedMeditation() {
 }
 
 function CalmColoring() {
+  const handleOpenColoring = () => {
+    window.open('https://www.crayola.com/free-coloring-pages', '_blank');
+  };
+  
   return (
     <section className="card">
       <header className="card-header">
@@ -129,11 +141,20 @@ function CalmColoring() {
         <h2>Relax with Digital Coloring</h2>
       </header>
       <p>Click and fill the shapes with calming colors.</p>
-      <iframe
-        src="https://justcolor.net/online-coloring/"
-        className="game-frame"
-        title="Calm Coloring"
-      ></iframe>
+      <button 
+        className="music-list-btn"
+        onClick={handleOpenColoring}
+      >
+        🎨 Open Coloring Page
+      </button>
+      <div className="coloring-options">
+        <button className="alt-color-btn" onClick={() => window.open('https://www.thecolor.com/', '_blank')}>
+          🖌️ SuperColoring
+        </button>
+        <button className="alt-color-btn" onClick={() => window.open('https://www.coloring.ws/', '_blank')}>
+          🌈 Coloring.ws
+        </button>
+      </div>
     </section>
   );
 }

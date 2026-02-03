@@ -21,29 +21,35 @@ function Profile() {
 
   const userId = localStorage.getItem('userId');
 
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      const response = await axios.get(`http://localhost:3001/profile/${userId}`);
+      if (response.data.user) {
+        setFormData({
+          name: response.data.user.name || '',
+          email: response.data.user.email || '',
+          phone: response.data.user.phone || '',
+          bio: response.data.user.bio || '',
+          profileImage: response.data.user.profileImage || ''
+        });
+      }
+    } catch (error) {
+      console.error('Error fetching profile:', error);
+      setError('Failed to load profile');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (!userId) {
       navigate('/login');
       return;
     }
     fetchProfile();
-  }, []);
-
-  const fetchProfile = async () => {
-    try {
-      setLoading(true);
-      const response = await axios.get(`http://localhost:3001/profile/${userId}`);
-      if (response.data.Status === 'Success') {
-        setFormData(response.data.user);
-        setError('');
-      }
-    } catch (err) {
-      setError('Failed to load profile');
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [userId, navigate]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;

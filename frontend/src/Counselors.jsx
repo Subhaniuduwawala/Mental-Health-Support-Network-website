@@ -18,21 +18,11 @@ import image35 from "./assets/image35.jpg";
 import image36 from "./assets/image36.jpg";
 
 const API = "http://localhost:3001/appointments";
+const COUNSELORS_API = "http://localhost:3001/counselors";
 
-const ALL_COUNSELORS = [
-  { name: "Mr. Ravi Fernando", category: "Career & Life Coaching", experience: "10 years", languages: "English, Tamil", approach: "Solution-Focused Brief Therapy, Goal Setting", quote: "Guiding you to rediscover purpose and balance in both career and life.", rating: 3, image: image25 },
-  { name: "Ms. Tharushi Jayawardena", category: "Relationship & Family Therapy", experience: "5 years", languages: "Sinhala", approach: "Emotionally Focused Therapy (EFT)", quote: "Helping couples and families improve emotional connection and communication.", rating: 2, image: image27 },
-  { name: "Dr. Ashani Dias", category: "Grief & Loss", experience: "12 years", languages: "English, Sinhala", approach: "Narrative Therapy, Supportive Counseling", quote: "Supporting you through loss with empathy, patience, and presence.", rating: 3, image: image28 },
-  { name: "Mr. Samoneera Wijesinghe", category: "Self-Esteem & Confidence", experience: "6 years", languages: "Sinhala, Tamil", approach: "Positive Psychology, Strength-Based Therapy", quote: "Helping you discover your inner strengths and self-worth.", rating: 2, image: image26 },
-  { name: "Ms. Ishara Senanayake", category: "Student & Academic Stress Support", experience: "4+ years", languages: "Sinhala, English", approach: "Cognitive-Behavioral Techniques, Time Management Coaching", quote: "Helping students handle academic pressure while building resilience.", rating: 2, image: image29 },
-  { name: "Mr. Kaween de Silva", category: "LGBTQ+ Affirmative Support", experience: "6 years", languages: "English", approach: "Humanistic Therapy, Identity-affirming conversations", quote: "Providing a safe, inclusive space to talk openly and heal freely.", rating: 2, image: image31 },
-  { name: "Ms. Nadeesha Perera", category: "Anxiety & Stress", experience: "7 years", languages: "Sinhala, English", approach: "CBT, Mindfulness", quote: "Equipping you with practical tools to quiet the mind.", rating: 4, image: image34 },
-  { name: "Mr. Harith Senarath", category: "Depression & Mood Support", experience: "8 years", languages: "Sinhala", approach: "Behavioral Activation, Supportive Therapy", quote: "Small steps forward can change the direction of your life.", rating: 4, image: image32 },
-  { name: "Dr. Menaka Wijeratne", category: "Child & Adolescent Therapy", experience: "11 years", languages: "English, Sinhala", approach: "Play Therapy, Family Systems", quote: "Creating safe spaces where young minds feel seen and heard.", rating: 5, image: image33 },
-  { name: "Ms. Piumi Ranasinghe", category: "Mindfulness & Meditation", experience: "6 years", languages: "English", approach: "MBSR, Breathwork", quote: "Come back to the present—where calm and clarity live.", rating: 4, image: image35 },
-  { name: "Mr. Sanjaya Jayasuriya", category: "Addiction Recovery Support", experience: "9 years", languages: "Sinhala, English", approach: "Motivational Interviewing, Relapse Prevention", quote: "Recovery is possible—and you don’t have to do it alone.", rating: 4, image: image36 },
-  { name: "Ms. Dinithi Abeysekara", category: "Trauma-Informed Care", experience: "10 years", languages: "Sinhala", approach: "EMDR-informed, Stabilization Skills", quote: "Gentle healing that respects your pace and your story.", rating: 5, image: image30 },
-];  
+
+// Default images for fallback if counselor doesn't have image from database
+const defaultImages = [image25, image26, image27, image28, image29, image30, image31, image32, image33, image34, image35, image36];
 
 // Converts iso date string to display format
 const fmtDisplay = (iso) => {
@@ -66,6 +56,8 @@ const [selectedCategory, setSelectedCategory] = useState("All");  // Category fi
 const [error, setError] = useState("");                           // Error message for validation
 const [success, setSuccess] = useState("");                        // Success message for booking
 const [loading, setLoading] = useState(false);                    // Indicates if the system is loading data
+const [counselors, setCounselors] = useState([]);                 // Counselors from database
+const [loadingCounselors, setLoadingCounselors] = useState(true); // Loading state for counselors
 
 
   // appointments + edit
@@ -79,13 +71,37 @@ const [loading, setLoading] = useState(false);                    // Indicates i
     date: "", time: "", notes: "",
   });
 
+  // Load counselors from database
+  useEffect(() => {
+    const fetchCounselors = async () => {
+      try {
+        setLoadingCounselors(true);
+        const res = await axios.get(COUNSELORS_API);
+        const counselorList = Array.isArray(res.data) ? res.data : [];
+        // Add default images to counselors that don't have images
+        const withImages = counselorList.map((c, idx) => ({
+          ...c,
+          image: c.image || defaultImages[idx % defaultImages.length]
+        }));
+        setCounselors(withImages);
+      } catch (err) {
+        console.error("Failed to fetch counselors:", err);
+        // Fallback to default if server is down
+        setCounselors([]);
+      } finally {
+        setLoadingCounselors(false);
+      }
+    };
+    fetchCounselors();
+  }, []);
+
   // Extract unique categories for filter dropdown
-  const categories = ["All", ...new Set(ALL_COUNSELORS.map(c => c.category))];
+  const categories = ["All", ...new Set(counselors.map(c => c.category))];
 
   // Filter counselors by selected category, then apply pagination
   const filteredCounselors = selectedCategory === "All" 
-    ? ALL_COUNSELORS 
-    : ALL_COUNSELORS.filter(c => c.category === selectedCategory);
+    ? counselors 
+    : counselors.filter(c => c.category === selectedCategory);
   
   const visibleCounselors = filteredCounselors.slice(0, visibleCount);
   const canShowMore = visibleCount < filteredCounselors.length;
@@ -220,7 +236,6 @@ const [loading, setLoading] = useState(false);                    // Indicates i
     let lastErr = null;
     for (const a of attempts) {
       try {
-        // eslint-disable-next-line no-await-in-loop
         const resp = await axios[a.method](a.url, a.data);
         return { ok: true, resp, tried: a };
       } catch (e) {
@@ -355,13 +370,22 @@ const [loading, setLoading] = useState(false);                    // Indicates i
 
       {/* Cards */}
       <section id="counselors-list" className="counselors-list" aria-label="Counselor profiles">
-        {visibleCounselors.map((c, index) => (
-          <article key={index} className="counselor-card" aria-labelledby={`c-name-${index}`}>
-            <div className="card-top">
-              <span className="category-badge" title={c.category}>{c.category}</span>
-              <img src={c.image} alt={`${c.name} profile`} className="counselor-img" />
-            </div>
-            <h3 id={`c-name-${index}`}>{c.name}</h3>
+        {loadingCounselors ? (
+          <p style={{ textAlign: 'center', padding: '40px', fontSize: '18px', color: '#666' }}>
+            Loading counselors...
+          </p>
+        ) : visibleCounselors.length === 0 ? (
+          <p style={{ textAlign: 'center', padding: '40px', fontSize: '18px', color: '#666' }}>
+            No counselors found. Please try again later.
+          </p>
+        ) : (
+          visibleCounselors.map((c, index) => (
+            <article key={index} className="counselor-card" aria-labelledby={`c-name-${index}`}>
+              <div className="card-top">
+                <span className="category-badge" title={c.category}>{c.category}</span>
+                <img src={c.image} alt={`${c.name} profile`} className="counselor-img" />
+              </div>
+              <h3 id={`c-name-${index}`}>{c.name}</h3>
             <div className="card-content">
               <ul className="counselor-meta">
                 <li className="meta-line"><strong>Experience:</strong> {c.experience}</li>
@@ -377,7 +401,8 @@ const [loading, setLoading] = useState(false);                    // Indicates i
               </div>
             </div>
           </article>
-        ))}
+          ))
+        )}
       </section>
 
       {/* Show more / less */}
@@ -410,7 +435,7 @@ const [loading, setLoading] = useState(false);                    // Indicates i
           </select>
           <select name="counselor" required aria-label="Select Counselor">
             <option value="">Choose Counselor</option>
-            {ALL_COUNSELORS.map((c, i) => (
+            {counselors.map((c, i) => (
               <option key={i} value={c.name}>{c.name} — {c.category}</option>
             ))}
           </select>
@@ -488,7 +513,7 @@ const [loading, setLoading] = useState(false);                    // Indicates i
               </select>
               <select value={editForm.counselor} onChange={(e) => setEditForm({ ...editForm, counselor: e.target.value })} required>
                 <option value="">Choose Counselor</option>
-                {ALL_COUNSELORS.map((c, i) => (
+                {counselors.map((c, i) => (
                   <option key={i} value={c.name}>{c.name} — {c.category}</option>
                 ))}
               </select>

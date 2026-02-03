@@ -118,6 +118,60 @@ filter: brightness(0.7); /* Darkens the video for better text contrast */
   margin-top: 10px;
 }
 
+/* Music List Button */
+.music-list-btn {
+  width: 100%;
+  height: 200px;
+  padding: 15px 20px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  margin: 15px 0;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+}
+
+.music-list-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.6);
+}
+
+.music-list-btn:active {
+  transform: translateY(0);
+}
+
+/* Coloring Options */
+.coloring-options {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.alt-color-btn {
+  flex: 1;
+  min-width: 120px;
+  padding: 10px 15px;
+  font-size: 0.95rem;
+  font-weight: 600;
+  background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 3px 10px rgba(245, 87, 108, 0.3);
+}
+
+.alt-color-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 5px 15px rgba(245, 87, 108, 0.5);
+}
+
 /* Tips */
 .tips { padding-left: 18px; color: #444; }
 .tips li { margin: 6px 0; }

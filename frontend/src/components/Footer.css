@@ -65,6 +65,12 @@
   transform: translateX(4px);
   font-weight: 500;
 }
+.footer-section.contact  {
+  display: flex;
+  flex-direction: column;
+  background-color:  #cccdf2;
+}
+
 
 .footer-section.contact p {
   display: flex;

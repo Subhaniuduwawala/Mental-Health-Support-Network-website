@@ -96,7 +96,7 @@ const Service = () => {
             Sometimes all you need is someone to listen. Our caring chat feature
             is here for you 24/7, offering comfort, tips, and a safe space.
           </p>
-          <button className="chat-btn">Chat Now</button>
+          <button className="chat-btn" onClick={() => window.location.href = '/chat'}>Chat Now</button>
         </div>
       </section>
     </div>

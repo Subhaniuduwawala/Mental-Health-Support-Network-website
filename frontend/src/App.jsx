@@ -14,6 +14,7 @@ import AboutUs from "./Aboutus";
 import Profile from "./Profile";
 import MusicList from "./MusicList";
 import MiniGames from "./MiniGames";
+import ChatInterface from "./ChatInterface";
 
 
 
@@ -37,6 +38,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/music-list" element={<MusicList />} />
           <Route path="/mini-games" element={<MiniGames />} />
+          <Route path="/chat" element={<ChatInterface />} />
    
           
           <Route path="/admin/appointments" element={<Admin />} /> 

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from "react-router-dom";
 import axios from 'axios';
+import API_BASE_URL from './config';
 import "./Login.css";
 import logo1 from "./assets/logo1.png";
 import Background from "./assets/Background.mp4";
@@ -17,7 +18,7 @@ function Login() {
     setError("");
     setLoading(true);
     try {
-      const response = await axios.post('http://localhost:3001/login', { 
+      const response = await axios.post(`${API_BASE_URL}/login`, { 
          email, password 
       });
 

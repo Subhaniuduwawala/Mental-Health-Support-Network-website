@@ -1,6 +1,7 @@
 // Counselors.jsx
 import React, { useState, useEffect } from "react";
 import axios from "axios";
+import API_BASE_URL from './config';
 import "./Counselors.css";
 import heroVideo from "./assets/hero-video2.mp4";
 import image24 from "./assets/image24.jpg";
@@ -17,8 +18,8 @@ import image34 from "./assets/image34.jpg";
 import image35 from "./assets/image35.jpg";
 import image36 from "./assets/image36.jpg";
 
-const API = "http://localhost:3001/appointments";
-const COUNSELORS_API = "http://localhost:3001/counselors";
+const API = `${API_BASE_URL}/appointments`;
+const COUNSELORS_API = `${API_BASE_URL}/counselors`;
 
 
 // Default images for fallback if counselor doesn't have image from database
@@ -230,8 +231,8 @@ const [loadingCounselors, setLoadingCounselors] = useState(true); // Loading sta
       { method: "patch", url: `${API}/${id}`,        data: payload },
       { method: "post",  url: `${API}/${id}`,        data: payload },             // some servers accept POST for update
       { method: "post",  url: `${API}/update/${id}`, data: payload },             // common pattern
-      { method: "put",   url: `http://localhost:3001/appointment/${id}`, data: body },   // singular route
-      { method: "patch", url: `http://localhost:3001/appointment/${id}`, data: payload },
+      { method: "put",   url: `${API_BASE_URL}/appointment/${id}`, data: body },   // singular route
+      { method: "patch", url: `${API_BASE_URL}/appointment/${id}`, data: payload },
     ];
     let lastErr = null;
     for (const a of attempts) {

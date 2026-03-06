@@ -2,6 +2,7 @@ import { useState } from "react";
 import 'bootstrap/dist/css/bootstrap.min.css'
 import axios from 'axios'
 import {Link, useNavigate} from 'react-router-dom'
+import API_BASE_URL from './config';
 import "./Signup.css";
 import logo1 from "./assets/logo1.png";
 import Background from "./assets/Background.mp4";
@@ -21,7 +22,7 @@ function Signup() {
         setError("")
         setLoading(true)
         try {
-            const response = await axios.post('http://localhost:3001/register', {name, email, password})
+            const response = await axios.post(`${API_BASE_URL}/register`, {name, email, password})
             if (response.data.Status === "Success") {
                 navigate('/login')
             } else {

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import API_BASE_URL from './config';
 import "./Admin.css";
 
 const Admin = () => {
@@ -59,10 +60,10 @@ const Admin = () => {
     const fetchData = async () => {
       try {
         const [apptRes, msgRes, counselorRes, musicRes] = await Promise.all([
-          axios.get("http://localhost:3001/appointments"),
-          axios.get("http://localhost:3001/messages"),
-          axios.get("http://localhost:3001/counselors"),
-          axios.get("http://localhost:3001/music"),
+          axios.get(`${API_BASE_URL}/appointments`),
+          axios.get(`${API_BASE_URL}/messages`),
+          axios.get(`${API_BASE_URL}/counselors`),
+          axios.get(`${API_BASE_URL}/music`),
         ]);
         setAppointments(apptRes.data);
         setMessages(msgRes.data);
@@ -81,7 +82,7 @@ const Admin = () => {
   // Delete handler
   const handleDelete = async (id, type) => {
     try {
-      await axios.delete(`http://localhost:3001/${type}/${id}`);
+      await axios.delete(`${API_BASE_URL}/${type}/${id}`);
       if (type === "appointments") {
         setAppointments((prev) => prev.filter((item) => item._id !== id));
       } else if (type === "messages") {
@@ -102,7 +103,7 @@ const Admin = () => {
     try {
       console.log(`Updating ${type} with ID:`, id);
       console.log("Data being sent:", formData);
-      const response = await axios.put(`http://localhost:3001/${type}/${id}`, formData);
+      const response = await axios.put(`${API_BASE_URL}/${type}/${id}`, formData);
       console.log("Update response:", response.data);
       
       if (type === "appointments") {
@@ -132,7 +133,7 @@ const Admin = () => {
   const handleCreateAppointment = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3001/appointments", newAppointment);
+      const res = await axios.post(`${API_BASE_URL}/appointments`, newAppointment);
       setAppointments([...appointments, res.data]);
       setNewAppointment({});
     } catch (err) {
@@ -145,7 +146,7 @@ const Admin = () => {
   const handleCreateMessage = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3001/messages", newMessage);
+      const res = await axios.post(`${API_BASE_URL}/messages`, newMessage);
       setMessages([...messages, res.data]);
       setNewMessage({});
     } catch (err) {
@@ -158,7 +159,7 @@ const Admin = () => {
   const handleCreateCounselor = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:3001/counselors", newCounselor);
+      const res = await axios.post(`${API_BASE_URL}/counselors`, newCounselor);
       setCounselors([res.data.counselor, ...counselors]);
       setNewCounselor({});
       setImagePreview("");
@@ -209,7 +210,7 @@ const Admin = () => {
       return;
     }
     try {
-      const res = await axios.post("http://localhost:3001/music", newMusic);
+      const res = await axios.post(`${API_BASE_URL}/music`, newMusic);
       setMusic([res.data.music, ...music]);
       setNewMusic({});
       setAudioPreview("");

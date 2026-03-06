@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useMusicPlayer } from "./hooks/useMusicPlayer";
+import API_BASE_URL from './config';
 import "./MusicList.css";
 
 const MusicList = () => {
@@ -16,7 +17,7 @@ const MusicList = () => {
 
   const fetchMusic = async () => {
     try {
-      const response = await axios.get("http://localhost:3001/music");
+      const response = await axios.get(`${API_BASE_URL}/music`);
       setMusicList(response.data);
     } catch (err) {
       console.error("Failed to fetch music:", err);

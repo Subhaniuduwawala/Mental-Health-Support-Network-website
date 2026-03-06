@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import API_BASE_URL from './config';
 import './Profile.css';
 
 function Profile() {
@@ -24,7 +25,7 @@ function Profile() {
   const fetchProfile = async () => {
     try {
       setLoading(true);
-      const response = await axios.get(`http://localhost:3001/profile/${userId}`);
+      const response = await axios.get(`${API_BASE_URL}/profile/${userId}`);
       if (response.data.user) {
         setFormData({
           name: response.data.user.name || '',
@@ -69,7 +70,7 @@ function Profile() {
     try {
       setSaving(true);
       setError('');
-      const response = await axios.put(`http://localhost:3001/profile/${userId}`, formData);
+      const response = await axios.put(`${API_BASE_URL}/profile/${userId}`, formData);
       
       if (response.data.Status === 'Success') {
         setSuccess('Profile updated successfully!');

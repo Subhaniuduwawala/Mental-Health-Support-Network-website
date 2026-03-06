@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import API_BASE_URL from './config';
 import "./AboutUs.css";
 import heroVideo from "./assets/hero-video5.mp4";
 import image37 from "./assets/image37.jpg";
@@ -16,7 +17,7 @@ export default function AboutUs() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await fetch("http://localhost:3001/messages", {
+      const res = await fetch(`${API_BASE_URL}/messages`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
